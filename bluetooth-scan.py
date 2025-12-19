@@ -6,8 +6,8 @@ import asyncio
 from winrt.windows.devices import radios
 from bleak import BleakScanner, BleakClient
 
-TARGET_NAME = "My_BLE_Device"  # Replace with your target device name
-ble_address = ''  # Will be set when the target device is found
+TARGET_NAME = "Your target_device"  # Replace with your target device name
+TARGET_ADRESS = None  # Will be set when the target device is found
 
 async def bluetooth_power(turn_on):
     all_radios = await radios.Radio.get_radios_async()
@@ -24,19 +24,18 @@ async def main():
     for device in devices:
         print(device)
         if device.name == TARGET_NAME:
-            ble_address = device.address
-            print(f"Found target device: {device.name} at {device.address}")
+            TARGET_ADRESS = device.address
             
-    if ble_address == None:
-        print("Target device {TARGET_NAME} not found. Retrying in 5 seconds...")
-        
+    if TARGET_ADRESS == None:
+        print(f"Target device {TARGET_NAME} not found. Retrying in 5 seconds...")
     else:
-        async with BleakClient(ble_address) as client:
+        print(f"Found target device: {device.name} at {device.address}")
+        async with BleakClient(TARGET_ADRESS) as client:
             # we’ll do the read/write operations here
-            print("Succesfully connected to {Target_NAME}")
+            print(f"Succesfully connected to {Target_NAME}")
             print(client.is_connected)
-            quit()
-
+            SystemExit
+            
 if __name__ == '__main__':
     asyncio.run(bluetooth_power(True)) # Ensure Bluetooth is on
 while True:
