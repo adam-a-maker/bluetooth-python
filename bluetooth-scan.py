@@ -6,7 +6,7 @@ import asyncio
 from winrt.windows.devices import radios
 from bleak import BleakScanner, BleakClient
 
-TARGET_NAME = "JBL LIVE660NC-LE"  # Replace with your target device name
+TARGET_NAME = "Your_device"  # Replace with your target device name
 TARGET_ADRESS = None  # Will be set when the target device is found
 NB_RETRIES = 5
 TRIES = 1
@@ -30,7 +30,7 @@ async def main():
             TARGET_ADRESS = device.address
             
     if TARGET_ADRESS is None:
-        print(f"Target device {TARGET_NAME} not found. Retrying in 5 seconds...")
+        print(f"Target device {TARGET_NAME} not found. Retrying in 5 seconds... (Try {TRIES}/{NB_RETRIES})")
         return False
     else:
         print(f"Found target device: {TARGET_NAME} at {TARGET_ADRESS}")
@@ -41,8 +41,8 @@ async def main():
             return True
             
 if __name__ == '__main__':
-    asyncio.run(bluetooth_power(True)) # Ensure Bluetooth is on
     for i in range(0, NB_RETRIES):
+        asyncio.run(bluetooth_power(True)) # Ensure Bluetooth is on
         print("Scanning for Bluetooth LE devices...")
         stop = asyncio.run(main())
         if stop:
